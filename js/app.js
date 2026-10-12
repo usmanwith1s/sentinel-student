@@ -33,27 +33,92 @@ function updateStatus() {
  * is created via createElement and filled with textContent.
  */
 function runAnalysis() {
-  const code = codeInput.value;
-  const findings = SentinelAnalyzer.analyze(code);
-
-  resultsPanel.innerHTML = ""; // clearing our own static template is safe
-  resultsPanel.appendChild(buildSummary(findings));
-
-  if (findings.length === 0) {
-    const ok = document.createElement("p");
-    ok.className = "results-empty";
-    ok.textContent =
-      "No issues detected by the current rules. Note: Sentinel performs " +
-      "static text analysis — it cannot guarantee your code is correct or " +
-      "that it compiles.";
-    resultsPanel.appendChild(ok);
+  // The analyzer returns [] for empty input too — handle empty separately
+  if (codeInput.value.trim() === "") {
+    lastFindings = [];
+    renderFindings();
+    const p = document.createElement("p");
+    p.className = "results-empty";
+    p.textContent = "The editor is empty. Paste some Java code first.";
+    resultsPanel.appendChild(p);
     return;
   }
 
-  findings.forEach(function (f) {
+  lastFindings = SentinelAnalyzer.analyze(codeInput.value);
+  renderFindings();
+}
+/**
+ * Render the current findings, honoring activeFilter.
+ * Called by: runAnalysis (new analysis) and filter buttons (re-filter).
+ */
+function renderFindings() {
+  resultsPanel.innerHTML = "";
+  resultsPanel.appendChild(buildSummary(lastFindings));
+
+  const visible = lastFindings.filter(function (f) {
+    return activeFilter === "All" || f.severity === activeFilter;
+  });
+
+  if (visible.length === 0) {
+    const p = document.createElement("p");
+    p.className = "results-empty";
+    if (lastFindings.length === 0) {
+      p.textContent =
+        "No issues detected by the current rules. Note: Sentinel performs " +
+        "static text analysis — it cannot guarantee your code is correct " +
+        "or that it compiles.";
+    } else {
+      p.textContent = "No " + activeFilter.toLowerCase() +
+        "s in this analysis. Try another filter.";
+    }
+    resultsPanel.appendChild(p);
+    return;
+  }
+
+  visible.forEach(function (f) {
     resultsPanel.appendChild(buildFindingCard(f));
   });
 }
+
+/** Click a filter button -> update state -> re-render. No re-analysis. */
+filterBar.addEventListener("click", function (event) {
+  const btn = event.target.closest("button[data-filter]");
+  if (!btn) return;
+
+  activeFilter = btn.dataset.filter;
+
+  // Move the .active style to the clicked button
+  filterBar.querySelectorAll(".filter-btn").forEach(function (b) {
+    b.classList.toggle("active", b === btn);
+  });
+
+  renderFindings();
+});
+
+/** Load the chosen sample into the editor. */
+function initSamples() {
+  SentinelSamples.forEach(function (sample) {
+    const opt = document.createElement("option");
+    opt.value = sample.id;
+    opt.textContent = sample.label;
+    sampleSelect.appendChild(opt);
+  });
+
+  sampleSelect.addEventListener("change", function () {
+    const chosen = SentinelSamples.find(function (s) {
+      return s.id === sampleSelect.value;
+    });
+    if (chosen) {
+      codeInput.value = chosen.code;
+      updateStatus();
+      resultsPanel.innerHTML =
+        '<p class="results-empty">Sample loaded. Press <strong>Analyze Code</strong>.</p>';
+    }
+    // Reset the dropdown so it reads "Load a sample…" again
+    sampleSelect.value = "";
+  });
+}
+initSamples();
 
 /** "3 findings: 1 error · 1 warning · 1 suggestion" */
 function buildSummary(findings) {
