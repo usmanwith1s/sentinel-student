@@ -162,3 +162,58 @@ select {
   color: var(--text-muted);
 }
 .site-footer p { margin: 0; }
+/* ===== Findings (Milestone 1) ===== */
+:root {
+  --sev-error: #f85149;
+  --sev-warning: #d29922;
+  --sev-suggestion: #58a6ff;
+}
+
+.results-summary {
+  margin: 0 0 var(--space);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.finding {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--text-muted);
+  border-radius: var(--radius);
+  padding: 0.75rem var(--space);
+  margin-bottom: 0.75rem;
+  background: var(--bg);
+}
+.finding.sev-error       { border-left-color: var(--sev-error); }
+.finding.sev-warning     { border-left-color: var(--sev-warning); }
+.finding.sev-suggestion  { border-left-color: var(--sev-suggestion); }
+
+.finding-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.finding-title {
+  margin: 0;
+  font-size: 0.95rem;
+}
+.badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.sev-error .badge       { background: var(--sev-error); }
+.sev-warning .badge     { background: var(--sev-warning); }
+.sev-suggestion .badge  { background: var(--sev-suggestion); }
+
+.finding p {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.finding-step { color: var(--text); }
