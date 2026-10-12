@@ -231,9 +231,11 @@ const SentinelAnalyzer = (function () {
     const emptyFindings = emptySourceRule.analyze(lines);
     if (emptyFindings.length > 0) return emptyFindings;
 
+        // Strip once, share with every rule (avoids repeated work)
+    const cleaned = stripCommentsAndStrings(lines);
     rules.forEach(function (rule) {
       if (rule === emptySourceRule) return; // already handled
-      findings.push.apply(findings, rule.analyze(lines));
+      findings.push.apply(findings, rule.analyze(lines, cleaned));
     });
 
     // Sort so Errors appear first, then Warnings, then Suggestions.
@@ -245,7 +247,12 @@ const SentinelAnalyzer = (function () {
     return findings;
   }
 
-  return { analyze: analyze };
+    return { analyze: analyze, registerRule: registerRule };
+
+  /** Allow other modules (like Syllabus Mode) to add rules. */
+  function registerRule(rule) {
+    rules.push(rule);
+  }
 })();
 
 // Make it reachable from app.js
