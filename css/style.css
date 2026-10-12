@@ -1,0 +1,164 @@
+/* ===== Design tokens =====
+   Every color, spacing value, and font lives here.
+   Future milestones change these once, everywhere. */
+:root {
+  --bg: #0d1117;
+  --bg-raised: #161b22;
+  --bg-editor: #0a0e14;
+  --border: #2b3340;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --accent: #4f8ef7;
+  --accent-hover: #6ba2ff;
+  --focus-ring: #58a6ff;
+  --radius: 8px;
+  --space: 1rem;
+  --font-ui: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+}
+
+/* ===== Base ===== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  line-height: 1.5;
+}
+
+/* Visible keyboard focus — accessibility requirement from the spec */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ===== Header ===== */
+.site-header {
+  padding: var(--space) calc(var(--space) * 1.5);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+}
+.brand { display: flex; align-items: center; gap: 0.6rem; }
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+.brand-name { font-size: 1.15rem; font-weight: 600; }
+.brand-name em { color: var(--accent-hover); font-style: normal; }
+.tagline { margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.85rem; }
+
+/* ===== Workspace ===== */
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space);
+  padding: var(--space);
+}
+
+@media (min-width: 900px) {
+  .workspace { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== Editor pane ===== */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space);
+}
+.toolbar-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+select {
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+
+.code-editor {
+  width: 100%;
+  min-height: 320px;
+  resize: vertical;
+  padding: var(--space);
+  background: var(--bg-editor);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  /* Critical: preserve indentation exactly as pasted */
+  white-space: pre;
+  tab-size: 4;
+}
+.code-editor::placeholder { color: var(--text-muted); }
+
+.editor-status {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ===== Results pane ===== */
+.results-pane {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space);
+}
+.results-title { margin: 0 0 var(--space); font-size: 1rem; }
+.results-empty { color: var(--text-muted); }
+.results-placeholder-note {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--accent-hover);
+}
+
+/* ===== Footer ===== */
+.site-footer {
+  padding: var(--space) calc(var(--space) * 1.5);
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.site-footer p { margin: 0; }
