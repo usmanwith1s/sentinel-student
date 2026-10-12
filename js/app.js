@@ -9,6 +9,14 @@ const statusLine = document.getElementById("editor-status");
 const resultsPanel = document.getElementById("results-panel");
 const analyzeBtn = document.getElementById("analyze-btn");
 const clearBtn = document.getElementById("clear-btn");
+// ----- UI state (Milestone 2) -----
+// lastFindings: results of the most recent analysis (source of truth)
+// activeFilter: which severity is currently shown
+let lastFindings = [];
+let activeFilter = "All";
+
+const sampleSelect = document.getElementById("sample-select");
+const filterBar = document.querySelector(".filter-bar");
 
 /** Update the "N lines · M characters" status line. */
 function updateStatus() {
