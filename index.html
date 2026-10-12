@@ -24,6 +24,12 @@
             <option value="java" selected>Java</option>
           </select>
         </label>
+                <label class="toolbar-field">
+          Sample
+          <select id="sample-select">
+            <option value="">Load a sample…</option>
+          </select>
+        </label>
         <div class="toolbar-actions">
           <button id="analyze-btn" class="btn btn-primary" type="button">Analyze Code</button>
           <button id="clear-btn" class="btn" type="button">Clear</button>
@@ -43,6 +49,12 @@
 
     <section class="results-pane" aria-label="Analysis results">
       <h2 class="results-title">Results</h2>
+            <div class="filter-bar" role="group" aria-label="Filter findings by severity">
+        <button class="filter-btn active" type="button" data-filter="All">All</button>
+        <button class="filter-btn" type="button" data-filter="Error">Errors</button>
+        <button class="filter-btn" type="button" data-filter="Warning">Warnings</button>
+        <button class="filter-btn" type="button" data-filter="Suggestion">Suggestions</button>
+      </div>
       <div id="results-panel" class="results-panel">
         <p class="results-empty">
           No analysis yet. Paste some Java code and press
@@ -60,7 +72,8 @@
     </p>
   </footer>
 
- <script src="js/analyzer.js"></script>
+<script src="js/samples.js"></script>
+<script src="js/analyzer.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
